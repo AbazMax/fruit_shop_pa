@@ -6,7 +6,6 @@ from main.models import Info, Contacts, Partners
 
 
 def order_create(request):
-
     cart = Cart(request)
     info = Info.objects.first()
     contacts = Contacts.objects.first()

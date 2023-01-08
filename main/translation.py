@@ -1,5 +1,4 @@
 from modeltranslation.translator import register, TranslationOptions
-
 from .models import Category, Product, Promo, Testimonials, About, WhyUs, Info, Contacts
 
 @register(Category)

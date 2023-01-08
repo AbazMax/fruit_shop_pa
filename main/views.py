@@ -3,7 +3,6 @@ from .models import *
 from .forms import UserMessage
 from cart.forms import CartAddProductForm
 
-# Create your views here.
 
 def index(request):
     info = Info.objects.first()
@@ -65,6 +64,7 @@ def about(request):
             }
 
     return render(request, 'main/about.html', context=data)
+
 
 def contact(request):
     if request.method == 'POST':

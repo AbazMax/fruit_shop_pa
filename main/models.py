@@ -6,8 +6,6 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.urls import reverse
 
-
-# Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     is_visible = models.BooleanField(default=True)
@@ -235,7 +233,7 @@ class Contacts(models.Model):
 
 class UserMessage(models.Model):
     name = models.CharField(max_length=50)
-    phone_re = RegexValidator(regex=r'^(\d{3}[- .]?){2}\d{4}$', message= 'Please enter phone number in format +xxx xx xxx xx xx')
+    phone_re = RegexValidator(regex=r'^(\d{3}[- .]?){2}\d{4}$', message= 'Please enter phone number in format xxx xxx xxxx')
     phone = models.CharField(max_length=15, validators=[phone_re])
     email = models.CharField(max_length=50, blank=True)
     subject = models.CharField(max_length=200)

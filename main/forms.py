@@ -2,7 +2,6 @@ from django import forms
 from .models import UserMessage
 from django.utils.translation import gettext_lazy
 
-
 class UserMessage(forms.ModelForm):
     name = forms.CharField(
         max_length=50,
