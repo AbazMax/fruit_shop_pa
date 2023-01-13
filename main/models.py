@@ -19,12 +19,17 @@ class Category(models.Model):
         verbose_name_plural = ('Categories')
 
 
-class Product(models.Model):
-
+class Mixin:
     def get_file_name(self, filename: str) -> str:
         ext_file = filename.strip().split('.')[-1]
         new_filename = f'{uuid.uuid4()}.{ext_file}'
         return os.path.join('products', new_filename)
+
+
+class Product(models.Model, Mixin):
+
+    def get_file_name(self, filename: str) -> str:
+        return super().get_file_name(filename)
 
     slug = models.SlugField(max_length=200, db_index=True)
     name = models.CharField(max_length=50, unique=True)
