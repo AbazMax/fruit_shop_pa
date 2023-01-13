@@ -1,6 +1,8 @@
 from modeltranslation.translator import register, TranslationOptions
 from .models import Category, Product, Promo, Testimonials, About, WhyUs, Info, Contacts
 
+"""Registering models and fields which should be translated"""
+
 @register(Category)
 class CategoryTranslationOptions(TranslationOptions):
     fields = ('name',)

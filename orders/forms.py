@@ -3,6 +3,9 @@ from .models import Order
 from django.utils.translation import get_language
 
 class OrderCreateForm(forms.ModelForm):
+
+    """Creating order form"""
+
     name = forms.CharField(
         max_length=100
     )

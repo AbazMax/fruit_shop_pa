@@ -6,7 +6,23 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.urls import reverse
 
+# Use RichTextField for all fields which needs to use CKeditor.
+
+class UniqueFileName:
+
+    """Mixin class to make uploaded files name unique"""
+
+    def get_file_name(self, filename: str) -> str:
+        """Get file name and change it using uuid"""
+        ext_file = filename.strip().split('.')[-1]
+        new_filename = f'{uuid.uuid4()}.{ext_file}'
+        return os.path.join(self.__class__.__name__, new_filename)
+
+
 class Category(models.Model):
+
+    """Categories of products"""
+
     name = models.CharField(max_length=50, unique=True)
     is_visible = models.BooleanField(default=True)
     position = models.SmallIntegerField(unique=True)
@@ -19,14 +35,7 @@ class Category(models.Model):
         verbose_name_plural = ('Categories')
 
 
-class Mixin:
-    def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('products', new_filename)
-
-
-class Product(models.Model, Mixin):
+class Product(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
         return super().get_file_name(filename)
@@ -53,12 +62,10 @@ class Product(models.Model, Mixin):
         return reverse('main:product_detail', args=[self.id, self.slug])
 
 
-class Promo(models.Model):
+class Promo(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('promo', new_filename)
+        return super().get_file_name(filename)
 
     period = (
         ('month', 'month'),
@@ -87,12 +94,10 @@ class Promo(models.Model):
         verbose_name_plural = ('Promo')
 
 
-class Testimonials(models.Model):
+class Testimonials(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('testimonials', new_filename)
+        return super().get_file_name(filename)
 
     name = models.CharField(max_length=100, unique=True)
     profession = models.CharField(max_length=50)
@@ -109,12 +114,10 @@ class Testimonials(models.Model):
         return f'{self.name}'
 
 
-class About(models.Model):
+class About(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('about', new_filename)
+        return super().get_file_name(filename)
 
     title_line_1 = models.CharField(max_length=50, blank=True, db_index=True)
     title_line_2 = models.CharField(max_length=50, blank=True, db_index=True)
@@ -130,12 +133,10 @@ class About(models.Model):
         return f'About'
 
 
-class WhyUs(models.Model):
+class WhyUs(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('whyus', new_filename)
+        return super().get_file_name(filename)
 
     delivery_title = models.CharField(max_length=50)
     delivery_text = models.TextField(max_length=200)
@@ -154,12 +155,10 @@ class WhyUs(models.Model):
         return f'WhyUs'
 
 
-class Partners(models.Model):
+class Partners(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('partners_logos', new_filename)
+        return super().get_file_name(filename)
 
     name = models.CharField(max_length=50)
     photo = models.ImageField(upload_to=get_file_name, )
@@ -172,12 +171,10 @@ class Partners(models.Model):
         return f'{self.name}'
 
 
-class Banner(models.Model):
+class Banner(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('Banner', new_filename)
+        return super().get_file_name(filename)
 
     name = models.CharField(max_length=50)
     banner_image = models.ImageField(upload_to=get_file_name, help_text='Recommended resolution: 1920x494px' )
@@ -190,12 +187,10 @@ class Banner(models.Model):
         return f'{self.name}'
 
 
-class Info(models.Model):
+class Info(models.Model, UniqueFileName):
 
     def get_file_name(self, filename: str) -> str:
-        ext_file = filename.strip().split('.')[-1]
-        new_filename = f'{uuid.uuid4()}.{ext_file}'
-        return os.path.join('main', new_filename)
+        return super().get_file_name(filename)
 
     brand_name = models.CharField(max_length=50, db_index=True)
     brand_logo = models.ImageField(upload_to=get_file_name)
@@ -237,6 +232,9 @@ class Contacts(models.Model):
 
 
 class UserMessage(models.Model):
+
+    """User messages created in contact form"""
+
     name = models.CharField(max_length=50)
     phone_re = RegexValidator(regex=r'^(\d{3}[- .]?){2}\d{4}$', message= 'Please enter phone number in format xxx xxx xxxx')
     phone = models.CharField(max_length=15, validators=[phone_re])

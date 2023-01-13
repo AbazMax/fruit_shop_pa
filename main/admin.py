@@ -1,7 +1,12 @@
 from django.contrib import admin
 from .models import Category, Promo, Product, Testimonials, About, WhyUs, Partners, Banner, Info, Contacts, UserMessage
 from modeltranslation.admin import TranslationAdmin
-# Register your models here.
+
+"""Registration models in admin panel.
+
+Use TranslationAdmin in models which should be localized.
+
+"""
 
 @admin.register(Category)
 class CategoryAdmin(TranslationAdmin):

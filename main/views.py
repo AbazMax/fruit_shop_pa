@@ -5,6 +5,7 @@ from cart.forms import CartAddProductForm
 
 
 def index(request):
+
     info = Info.objects.first()
     partners = Partners.objects.filter(is_visible=True)
     contacts = Contacts.objects.first()

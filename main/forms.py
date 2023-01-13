@@ -3,6 +3,9 @@ from .models import UserMessage
 from django.utils.translation import get_language
 
 class UserMessage(forms.ModelForm):
+
+    """Contact form"""
+
     name = forms.CharField(
         max_length=50
     )
